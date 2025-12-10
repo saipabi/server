@@ -107,6 +107,14 @@ router.post(
       }
 
       // Create JWT
+      if (!process.env.JWT_SECRET) {
+        console.error('JWT_SECRET is not set in environment variables');
+        return res.status(500).json({
+          success: false,
+          message: 'Server configuration error',
+        });
+      }
+
       const token = jwt.sign(
         { userId: user._id },
         process.env.JWT_SECRET,

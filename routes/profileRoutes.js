@@ -65,10 +65,15 @@ router.put(
       const { name, age, dob, contact } = req.body;
 
       const updateData = {};
-      if (name !== undefined) updateData.name = name.trim();
-      if (age !== undefined) updateData.age = parseInt(age);
-      if (dob !== undefined) updateData.dob = dob;
-      if (contact !== undefined) updateData.contact = contact.trim();
+      if (name !== undefined && name !== null) updateData.name = name.trim();
+      if (age !== undefined && age !== null) {
+        const ageNum = parseInt(age, 10);
+        if (!isNaN(ageNum)) {
+          updateData.age = ageNum;
+        }
+      }
+      if (dob !== undefined && dob !== null && dob !== '') updateData.dob = dob;
+      if (contact !== undefined && contact !== null) updateData.contact = contact.trim();
 
       const user = await User.findByIdAndUpdate(
         req.userId,
