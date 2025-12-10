@@ -1,4 +1,4 @@
-// server.js
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -10,18 +10,22 @@ const logoutRoutes = require("./routes/logoutRoutes");
 
 const app = express();
 
+// ---- CORS SETUP ----
 const FRONTEND_URL = process.env.CLIENT_ORIGIN || "https://logginnpag.netlify.app";
 
 const allowedOrigins = [
   FRONTEND_URL,
   "http://localhost:5173",
   "http://localhost:3000",
+  "http://localhost:3001",   
 ];
+
+console.log("Allowed origins at startup:", allowedOrigins);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-
+      
       if (!origin) return callback(null, true);
 
       if (!allowedOrigins.includes(origin)) {
@@ -35,22 +39,24 @@ app.use(
   })
 );
 
-
+// ---- BODY PARSERS ----
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+// ---- DB ----
 connectDB();
 
+// ---- ROUTES ----
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/logout", logoutRoutes);
 
-
+// Health
 app.get("/api/health", (req, res) => {
   res.json({ success: true, message: "Server is running" });
 });
 
+// Error handler
 app.use((err, req, res, next) => {
   console.error("Error:", err.message || err);
   res.status(500).json({
