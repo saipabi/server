@@ -13,6 +13,14 @@ const app = express();
 const FRONTEND_URL = process.env.CLIENT_ORIGIN || "https://logginnpag.netlify.app";
 
 
+// const allowedOrigins = [
+//   FRONTEND_URL,
+//   FRONTEND_URL.endsWith('/') ? FRONTEND_URL.slice(0, -1) : FRONTEND_URL + '/', 
+//   "http://localhost:5173",
+//   "http://localhost:3000",
+//   "http://localhost:3001",
+// ];
+
 const allowedOrigins = [
   FRONTEND_URL,
   FRONTEND_URL.endsWith('/') ? FRONTEND_URL.slice(0, -1) : FRONTEND_URL + '/', 
@@ -20,7 +28,6 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
 ];
-
 console.log("Allowed origins at startup:", allowedOrigins);
 
 app.use(
