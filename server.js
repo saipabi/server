@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -13,11 +12,13 @@ const app = express();
 // ---- CORS SETUP ----
 const FRONTEND_URL = process.env.CLIENT_ORIGIN || "https://logginnpag.netlify.app";
 
+
 const allowedOrigins = [
   FRONTEND_URL,
+  FRONTEND_URL.endsWith('/') ? FRONTEND_URL.slice(0, -1) : FRONTEND_URL + '/', 
   "http://localhost:5173",
   "http://localhost:3000",
-  "http://localhost:3001",   
+  "http://localhost:3001",
 ];
 
 console.log("Allowed origins at startup:", allowedOrigins);
@@ -28,6 +29,7 @@ app.use(
       
       if (!origin) return callback(null, true);
 
+     
       if (!allowedOrigins.includes(origin)) {
         console.log("Blocked by CORS:", origin);
         return callback(new Error("Not allowed by CORS"), false);
@@ -38,6 +40,7 @@ app.use(
     credentials: true,
   })
 );
+
 
 // ---- BODY PARSERS ----
 app.use(express.json());
